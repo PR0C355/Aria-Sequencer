@@ -2,6 +2,7 @@ import tkinter as tk
 import tkinter.filedialog as fd
 import tkinter.font as font
 from tkinter import *
+from tkinter import ttk
 from PIL import ImageTk, Image
 
 import Sequencer
@@ -27,7 +28,7 @@ root.configure(bg=BLACK)
 
 MAIN_MENU_FONT = font.Font(family='Broadway', size=100)
 SUBTITLE_FONT = font.Font(family='Broadway', size=25)
-STATUS_FONT = font.Font(family='Broadway', size=70)
+STATUS_FONT = font.Font(family='Broadway', size=30)
 LARGE_BUTTON_FONT = font.Font(family='Broadway', size=50)
 
 
@@ -61,6 +62,13 @@ def main_page():
         font=MAIN_MENU_FONT
     )
 
+    global main_page_separator
+    main_page_separator = tk.Frame(root, bg=WHITE, height=4)
+
+    global main_page_spacer
+    main_page_spacer = tk.Frame(root, bg=BLACK, height=20)
+    
+
     global video_creation_button
     video_creation_button = tk.Button(
         root,
@@ -84,6 +92,8 @@ def main_page():
     )
 
     main_title.pack()
+    main_page_separator.pack(fill="x")
+    main_page_spacer.pack()
     video_creation_button.pack()
     folder_processor_button.pack()
 
@@ -366,7 +376,7 @@ def video_creator():
         root,
         textvariable=download_status,
         # width=50,
-        font=SUBTITLE_FONT,
+        font=STATUS_FONT,
         background=LABEL_BG,
         fg=LABEL_FG
     )
@@ -570,7 +580,7 @@ def folder_processor():
         root,
         textvariable=download_status,
         # width=50,
-        font=SUBTITLE_FONT,
+        font=STATUS_FONT,
         background=LABEL_BG,
         fg=LABEL_FG
     )
