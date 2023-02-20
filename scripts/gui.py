@@ -2,10 +2,10 @@ import tkinter as tk
 import tkinter.filedialog as fd
 import tkinter.font as font
 from tkinter import *
-from tkinter import ttk
-from PIL import ImageTk, Image
 
-import Sequencer
+from PIL import Image, ImageTk
+
+import Sequencer as Sequencer
 
 BLACK: str = "black"
 WHITE: str = "white"
@@ -40,7 +40,6 @@ SEQUENCE_FOLDER_IMAGE = ImageTk.PhotoImage(Image.open("Images/SequenceFolder.png
 BACK_IMAGE = ImageTk.PhotoImage(Image.open("Images/Back.png", mode='r'))#.resize((200, 50)))
 CREATE_VIDEO_IMAGE = ImageTk.PhotoImage(Image.open("Images/CreateVideo.png", mode='r'))#.resize((200, 50)))
 PROCESS_FOLDER_IMAGE = ImageTk.PhotoImage(Image.open("Images/ProcessFolder.png", mode='r'))#.resize((200, 50)))
-
 
 
 VIDEO_EXTENSIONS = ["mov", "mp4", "avi", "m4v"]
@@ -704,6 +703,9 @@ def folder_processor_to_main():
     remove_folder_processor()
     main_page()
 
-if __name__ == '__main__':
+def run():
     main_page()
     root.mainloop()
+
+if __name__ == '__main__':
+    run()

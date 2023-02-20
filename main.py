@@ -1,4 +1,4 @@
-import gui
+import scripts.gui as gui
 
 
 if __name__ == '__main__':
