@@ -7,13 +7,16 @@ from PIL import ImageTk, Image
 import Sequencer
 
 BLACK: str = "black"
+WHITE: str = "white"
 
 TITLE_FG: str = "white"
 TITLE_BG: str = "black"
 LABEL_FG: str = "white"
 LABEL_BG: str = "black"
-ENTRY_FG: str = "black"
-ENTRY_BG: str = "white"
+ENTRY_FG: str = "white"
+ENTRY_BG: str = "black"
+
+ENTRY_WIDTH: int = 44
 
 
 root = tk.Tk()
@@ -28,10 +31,23 @@ STATUS_FONT = font.Font(family='Broadway', size=70)
 LARGE_BUTTON_FONT = font.Font(family='Broadway', size=50)
 
 
-CHOOSE_DIRECTORY_IMAGE = ImageTk.PhotoImage(Image.open("Images/Choose Directory.png", mode='r').resize((200, 100)))
+
+# CHOOSE_DIRECTORY_IMAGE = ImageTk.PhotoImage(Image.open("Images/ChooseDirectory.png", mode='r').resize((200, 50)))
+
+SEQUENCE_IMAGE = ImageTk.PhotoImage(Image.open("Images/SequenceImages.png", mode='r'))#.resize((200, 50)))
+SEQUENCE_FOLDER_IMAGE = ImageTk.PhotoImage(Image.open("Images/SequenceFolder.png", mode='r'))#.resize((200, 50)))
+BACK_IMAGE = ImageTk.PhotoImage(Image.open("Images/Back.png", mode='r'))#.resize((200, 50)))
+CREATE_VIDEO_IMAGE = ImageTk.PhotoImage(Image.open("Images/CreateVideo.png", mode='r'))#.resize((200, 50)))
+PROCESS_FOLDER_IMAGE = ImageTk.PhotoImage(Image.open("Images/ProcessFolder.png", mode='r'))#.resize((200, 50)))
+
+
 
 VIDEO_EXTENSIONS = ["mov", "mp4", "avi", "m4v"]
-RECORDING_PROFILES = [15]
+RECORDING_PROFILES = [15, 0, 12, 2, 4, 5, 9, 10, 14, 8, 16, 18, 19, 21]
+
+VIDEO_EXTENSIONS.sort()
+RECORDING_PROFILES.sort()
+
 
 def main_page():
     global root
@@ -48,20 +64,22 @@ def main_page():
     global video_creation_button
     video_creation_button = tk.Button(
         root,
-        text = "Folder to Video",
+        text = "Sequence Images",
         font = SUBTITLE_FONT,
         bg = "#63666A",
         fg = "black",
+        image=SEQUENCE_IMAGE,
         command = main_to_video_creator,
     )
 
     global folder_processor_button
     folder_processor_button = tk.Button(
         root,
-        text = "Convert Exported Folder to Multiple Streams",
+        text = "Sequence Exported Folder",
         font = SUBTITLE_FONT,
         bg = "#63666A",
         fg = "black",
+        image=SEQUENCE_FOLDER_IMAGE,
         command = main_to_folder_processor,
     )
 
@@ -103,6 +121,17 @@ def video_creator():
     download_status.set("")
 
 
+    global video_creator_title
+    video_creator_title = tk.Label(
+        root,
+        text = "Sequence Images",
+        foreground=TITLE_FG,
+        background=TITLE_BG,
+        font=MAIN_MENU_FONT
+    )
+    video_creator_title.pack()
+
+
     # Image Directory
     global image_directory_frame
     global selected_image_directory_label
@@ -125,13 +154,15 @@ def video_creator():
     selected_image_directory_entry = tk.Entry(
         image_directory_frame,
         textvariable=selected_image_directory,
-        width=44,
+        width=ENTRY_WIDTH,
         font=SUBTITLE_FONT,
         bg=ENTRY_BG,
         fg=ENTRY_FG,
+        insertbackground=WHITE
     )
     selected_image_directory_entry.config(borderwidth=5, highlightthickness=0)
     selected_image_directory_entry.pack(side=LEFT)
+    selected_image_directory_entry.focus_set()
 
     download_directory_button = tk.Button(
         image_directory_frame,
@@ -139,7 +170,7 @@ def video_creator():
         font = SUBTITLE_FONT,
         borderwidth=0,
         bg = BLACK,
-        image=CHOOSE_DIRECTORY_IMAGE,
+        # image=CHOOSE_DIRECTORY_IMAGE,
         command = lambda: selected_image_directory.set(f"{fd.askdirectory()}")
     )
     download_directory_button.pack(side=LEFT) 
@@ -154,7 +185,7 @@ def video_creator():
 
     selected_video_filename_label = tk.Label(
         video_filename_frame,
-        text="Video Filename:",
+        text="Output Video Filename:",
         # width=50,
         font=SUBTITLE_FONT,
         background=LABEL_BG,
@@ -165,10 +196,11 @@ def video_creator():
     selected_video_filename_entry = tk.Entry(
         video_filename_frame,   
         textvariable=selected_video_filename,
-        width=44,
+        width=ENTRY_WIDTH,
         font=SUBTITLE_FONT,
         bg=ENTRY_BG,
         fg=ENTRY_FG,
+        insertbackground=WHITE,
     )
     selected_video_filename_entry.config(borderwidth=5, highlightthickness=0)
     selected_video_filename_entry.pack(side=LEFT)
@@ -195,10 +227,11 @@ def video_creator():
     selected_audio_file_entry = tk.Entry(
         audio_file_frame,
         textvariable=selected_audio_file,
-        width=44,
+        width=ENTRY_WIDTH,
         font=SUBTITLE_FONT,
         bg=ENTRY_BG,
         fg=ENTRY_FG,
+        insertbackground=WHITE,
     )
     selected_audio_file_entry.config(borderwidth=5, highlightthickness=0)
     selected_audio_file_entry.pack(side=LEFT)
@@ -214,7 +247,7 @@ def video_creator():
     selected_audio_file_button.pack(side=LEFT)
 
     global video_extension_frame
-    video_extension_frame = tk.Frame(root)
+    video_extension_frame = tk.Frame(root, bg=BLACK)
     video_extension_frame.pack()
 
     # Video Extension
@@ -244,7 +277,7 @@ def video_creator():
     global selected_clockwise_entry
 
     selected_clockwise_button = tk.Checkbutton(
-        root,
+        video_extension_frame,
         text="Turn 90\U000000B0 Clockwise",
         variable=selected_clockwise,
         onvalue=True,
@@ -276,10 +309,11 @@ def video_creator():
     selected_frame_rate_entry = tk.Entry(
         frame_rate_frame,
         textvariable=selected_frame_rate,
-        width=44,
+        width=ENTRY_WIDTH,
         font=SUBTITLE_FONT,
         bg=ENTRY_BG,
-        fg=ENTRY_FG
+        fg=ENTRY_FG,
+        insertbackground=WHITE
     )
     selected_frame_rate_entry.config(borderwidth=5, highlightthickness=0)
     selected_frame_rate_entry.pack(side=LEFT)
@@ -306,10 +340,11 @@ def video_creator():
     selected_output_directory_entry = tk.Entry(
         selected_output_directory_frame,
         textvariable=selected_output_directory,
-        width=44,
+        width=ENTRY_WIDTH,
         font=SUBTITLE_FONT,
         bg=ENTRY_BG,
-        fg=ENTRY_FG
+        fg=ENTRY_FG,
+        insertbackground=WHITE
     )
     selected_output_directory_entry.config(borderwidth=5, highlightthickness=0)
     selected_output_directory_entry.pack(side=LEFT)
@@ -324,17 +359,6 @@ def video_creator():
     )
     selected_output_directory_button.pack(side=LEFT)
 
-    # Create Video Button
-    global create_video_button
-    create_video_button = tk.Button(
-        root,
-        text = "Create Video",
-        font = SUBTITLE_FONT,
-        bg = "#63666A",
-        fg = "black",
-        command = lambda: Sequencer.create_video(dir=selected_image_directory.get(), output_dir=selected_output_directory.get(), video_filename=selected_video_filename.get(), aud_dir=selected_audio_file.get(), vid_ext=selected_video_extension.get(), rotate_clockwise=selected_clockwise.get(), frame_rate=selected_frame_rate.get(), status_var=download_status, gui_root=root)
-    )
-    create_video_button.pack()
 
     # Download Status
     global download_status_label
@@ -348,18 +372,35 @@ def video_creator():
     )
     download_status_label.pack()
 
+    global bottom_frame
+    bottom_frame = tk.Frame(root, bg=BLACK)
+    bottom_frame.pack()
+
+    # Create Video Button
+    global create_video_button
+    create_video_button = tk.Button(
+        bottom_frame,
+        text = "Create Video",
+        font = SUBTITLE_FONT,
+        bg = "#63666A",
+        fg = "black",
+        image=CREATE_VIDEO_IMAGE,
+        command = lambda: Sequencer.create_video(dir=selected_image_directory.get(), output_dir=selected_output_directory.get(), video_filename=selected_video_filename.get(), aud_dir=selected_audio_file.get(), vid_ext=selected_video_extension.get(), rotate_clockwise=selected_clockwise.get(), frame_rate=selected_frame_rate.get(), status_var=download_status, gui_root=root)
+    )
+    create_video_button.pack(side=LEFT)
 
     # Back Button
     global back_button
     back_button = tk.Button(
-        root,
+        bottom_frame,
         text = "Back",
         font = SUBTITLE_FONT,
         bg = "#63666A",
         fg = "black",
+        image=BACK_IMAGE,
         command = video_creator_to_main,
     )
-    back_button.pack()
+    back_button.pack(side=LEFT)
 
 def folder_processor():
     global selected_folder_directory
@@ -368,7 +409,7 @@ def folder_processor():
 
     global selected_folder_extension
     selected_folder_extension = tk.StringVar(root)
-    selected_folder_extension.set("~")
+    selected_folder_extension.set("mp4")
 
     global selected_folder_recording_profile
     selected_folder_recording_profile = tk.IntVar(root)
@@ -382,130 +423,146 @@ def folder_processor():
     download_status = tk.StringVar(root)
     download_status.set("")
 
+    global folder_processor_title
+    folder_processor_title = tk.Label(
+        root,
+        text = "Sequence Multiple Streams",
+        foreground=TITLE_FG,
+        background=TITLE_BG,
+        font=MAIN_MENU_FONT
+    )
+    folder_processor_title.pack()
+
     # Folder Directory
     global selected_folder_directory_label
     global selected_folder_directory_entry
     global selected_folder_directory_button
+    global selected_folder_directory_frame
+
+    selected_folder_directory_frame = tk.Frame(root, bg=BLACK)
+    selected_folder_directory_frame.pack()
 
     selected_folder_directory_label = tk.Label(
-        root,
+        selected_folder_directory_frame,
         text="Select Directory:",
         # width=50,
         font=SUBTITLE_FONT,
         background=LABEL_BG,
         fg=LABEL_FG
     )
-    selected_folder_directory_label.pack()
+    selected_folder_directory_label.pack(side=LEFT)
 
     selected_folder_directory_entry = tk.Entry(
-        root,
+        selected_folder_directory_frame,
         textvariable=selected_folder_directory,
-        width=44,
+        width=ENTRY_WIDTH,
         font=SUBTITLE_FONT,
         bg=ENTRY_BG,
-        fg=ENTRY_FG
+        fg=ENTRY_FG,
+        insertbackground=WHITE
     )
     selected_folder_directory_entry.config(borderwidth=5, highlightthickness=0)
-    selected_folder_directory_entry.pack()
+    selected_folder_directory_entry.pack(side=LEFT)
+    selected_folder_directory_entry.focus_set()
 
     selected_folder_directory_button = tk.Button(
-        root,
+        selected_folder_directory_frame,
         text = "Choose Directory",
         font = SUBTITLE_FONT,
         bg = BLACK,
         # image=CHOOSE_DIRECTORY_IMAGE,
         command = lambda: selected_folder_directory.set(f"{fd.askdirectory()}")
     )
-    selected_folder_directory_button.pack() 
+    selected_folder_directory_button.pack(side=LEFT) 
 
     # Export Extension
     global selected_export_extension_label
     global selected_export_extension_entry
+    global selected_export_extension_frame
+
+    selected_export_extension_frame = tk.Frame(root, bg=BLACK)
+    selected_export_extension_frame.pack()
 
     selected_export_extension_label = tk.Label(
-        root,
+        selected_export_extension_frame,
         text="Select Extension:",
         # width=50,
         font=SUBTITLE_FONT,
         background=LABEL_BG,
         fg=LABEL_FG
     )
-    selected_export_extension_label.pack()
+    selected_export_extension_label.pack(side=LEFT)
     selected_export_extension_entry = tk.OptionMenu(
-        root,
+        selected_export_extension_frame,
         selected_folder_extension,
         *VIDEO_EXTENSIONS,
         command = lambda x: selected_folder_extension.set(x)
     )
-    selected_export_extension_entry.pack() 
+    selected_export_extension_entry.pack(side=LEFT) 
 
     global selected_folder_recording_profile_label
     global selected_folder_recording_profile_entry
+    global selected_folder_recording_profile_frame
 
+    selected_folder_recording_profile_frame = tk.Frame(root, bg=BLACK)
+    selected_folder_recording_profile_frame.pack()
     selected_folder_recording_profile_label = tk.Label(
-        root,
+        selected_folder_recording_profile_frame,
         text="Select Recording Profile:",
         # width=50,
         font=SUBTITLE_FONT,
         background=LABEL_BG,
         fg=LABEL_FG
     )
-    selected_folder_recording_profile_label.pack()
+    selected_folder_recording_profile_label.pack(side=LEFT)
     selected_folder_recording_profile_entry = tk.OptionMenu(
-        root,
+        selected_folder_recording_profile_frame,
         selected_folder_recording_profile,
         *RECORDING_PROFILES,
         command = lambda x: selected_folder_recording_profile.set(x)
     )
-    selected_folder_recording_profile_entry.pack()
+    selected_folder_recording_profile_entry.pack(side=LEFT)
 
     # Output Directory
     global selected_folder_output_directory_label
     global selected_folder_output_directory_entry
     global selected_folder_output_directory_button
+    global selected_folder_output_directory_frame
+
+    selected_folder_output_directory_frame = tk.Frame(root, bg=BLACK)
+    selected_folder_output_directory_frame.pack()
 
     selected_folder_output_directory_label = tk.Label(
-        root,
+        selected_folder_output_directory_frame,
         text="Select Output Directory:",
         # width=50,
         font=SUBTITLE_FONT,
         background=LABEL_BG,
         fg=LABEL_FG
     )
-    selected_folder_output_directory_label.pack()
+    selected_folder_output_directory_label.pack(side=LEFT)
 
     selected_folder_output_directory_entry = tk.Entry(
-        root,
+        selected_folder_output_directory_frame,
         textvariable=selected_folder_output_directory,
-        width=44,
+        width=ENTRY_WIDTH,
         font=SUBTITLE_FONT,
         bg=ENTRY_BG,
         fg=ENTRY_FG,
+        insertbackground=WHITE,
     )
     selected_folder_output_directory_entry.config(borderwidth=5, highlightthickness=0)
-    selected_folder_output_directory_entry.pack()
+    selected_folder_output_directory_entry.pack(side=LEFT)
 
     selected_folder_output_directory_button = tk.Button(
-        root,
+        selected_folder_output_directory_frame,
         text = "Choose Directory",
         font = SUBTITLE_FONT,
         bg = BLACK,
         # image=CHOOSE_DIRECTORY_IMAGE,
         command = lambda: selected_folder_output_directory.set(f"{fd.askdirectory()}")
     )
-    selected_folder_output_directory_button.pack()
-
-    # Process Folder Button
-    global process_folder_button
-    process_folder_button = tk.Button(
-        root,
-        text = "Process Folder",
-        font = SUBTITLE_FONT,
-        bg = "#63666A",
-        fg = "black",
-        command = lambda: Sequencer.video_folder_extraction(dir=selected_folder_directory.get(), vid_ext=selected_folder_extension.get(),recording_profile=selected_folder_recording_profile.get(), status_var=download_status, gui_root=root, output_dir=selected_folder_output_directory.get()),
-    )
-    process_folder_button.pack()
+    selected_folder_output_directory_button.pack(side=LEFT)
 
     # Download Status
     global download_status_label
@@ -519,24 +576,45 @@ def folder_processor():
     )
     download_status_label.pack()
 
+    global bottom_frame
+    bottom_frame = tk.Frame(root, bg=BLACK)
+    bottom_frame.pack()
+
+    # Process Folder Button
+    global process_folder_button
+    process_folder_button = tk.Button(
+        bottom_frame,
+        text = "Process Folder",
+        font = SUBTITLE_FONT,
+        bg = "#63666A",
+        fg = "black",
+        image=PROCESS_FOLDER_IMAGE,
+        command = lambda: Sequencer.video_folder_extraction(dir=selected_folder_directory.get(), vid_ext=selected_folder_extension.get(),recording_profile=selected_folder_recording_profile.get(), status_var=download_status, gui_root=root, output_dir=selected_folder_output_directory.get()),
+    )
+    process_folder_button.pack(side=LEFT)
+
+    
     # Back Button
     global back_button
     back_button = tk.Button(
-        root,
+        bottom_frame,
         text = "Back",
         font = SUBTITLE_FONT,
         bg = "#63666A",
         fg = "black",
+        image=BACK_IMAGE,
         command = folder_processor_to_main,
     )
-    back_button.pack()
+    back_button.pack(side=LEFT)
 
 def remove_main_page():
-    main_title.pack_forget()
-    video_creation_button.pack_forget()
-    folder_processor_button.pack_forget()
+    main_title.destroy()
+    video_creation_button.destroy()
+    folder_processor_button.destroy()
 
 def remove_video_creator():
+    video_creator_title.pack_forget()
+
     image_directory_frame.pack_forget()
     selected_image_directory_label.pack_forget()
     selected_image_directory_entry.pack_forget()
@@ -566,24 +644,39 @@ def remove_video_creator():
     selected_output_directory_entry.pack_forget()
     selected_output_directory_button.pack_forget()
 
+    
     create_video_button.pack_forget()
     download_status_label.pack_forget()
     back_button.pack_forget()
+    bottom_frame.pack_forget()
 
 def remove_folder_processor():
+    folder_processor_title.pack_forget()
+
+    selected_folder_directory_frame.pack_forget()
     selected_folder_directory_label.pack_forget()
     selected_folder_directory_entry.pack_forget()
     selected_folder_directory_button.pack_forget()
+
+    selected_export_extension_frame.pack_forget()
     selected_export_extension_label.pack_forget()
     selected_export_extension_entry.pack_forget()
+
+    selected_folder_recording_profile_frame.pack_forget()
     selected_folder_recording_profile_label.pack_forget()
     selected_folder_recording_profile_entry.pack_forget()
+
+    selected_folder_output_directory_frame.pack_forget()
     selected_folder_output_directory_label.pack_forget()
     selected_folder_output_directory_entry.pack_forget()
     selected_folder_output_directory_button.pack_forget()
+
     process_folder_button.pack_forget()
     download_status_label.pack_forget()
+    
     back_button.pack_forget() 
+    bottom_frame.pack_forget()
+
 
 def main_to_video_creator():
     remove_main_page()
@@ -600,3 +693,7 @@ def main_to_folder_processor():
 def folder_processor_to_main():
     remove_folder_processor()
     main_page()
+
+if __name__ == '__main__':
+    main_page()
+    root.mainloop()
