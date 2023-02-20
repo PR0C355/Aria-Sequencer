@@ -1,13 +1,12 @@
-from ast import arg
-import cv2
-import numpy as np
 import glob
+import os
+import tkinter as tk
+from timeit import default_timer as Timer
+
+import cv2
 import ffmpeg
 from ffprobe import FFProbe
-import tkinter as tk
-from tkinter import filedialog
-import os
-from timeit import default_timer as Timer
+
 
 def second_time_convert(seconds: float, text: bool = False):
     seconds = round(seconds, 1)
@@ -49,8 +48,6 @@ def second_time_convert(seconds: float, text: bool = False):
             return f"{days} days, {int(hours)} hours, {int(minutes)} minutes and {seconds} seconds"
         else:
             return f"{days}D {int(hours)}H {int(minutes)}m {seconds}s"
-
-    
 
 def create_video(dir: str, output_dir: str = "", video_filename: str = "", aud_dir: str = "", vid_ext: str = "mp4", img_ext: str = "jpg", frame_size: str = "", rotate_clockwise: bool = False, frame_rate: int = 30, status_var: tk.StringVar = None, gui_root: tk.Tk = None):
     create_video_timer = Timer()
@@ -182,11 +179,16 @@ def video_folder_extraction(dir: str, vid_ext:str, recording_profile: int = 15, 
         ArianeSLAM_Right = f"{dir}/1201-2"
         ArianeEyeCam = f"{dir}/211-1"
 
+
+        RGB_FPS: int = 30
+        SLAM_FPS: int = 30
+        ET_FPS: int = 10
+
         print("Creating Video for Ariane - RGB Camera...")
         if status_var != None:
             status_var.set("Creating Video for Ariane - RGB Camera...")
             gui_root.update()
-        create_video(dir=ArianeRGB, aud_dir=audio_file, rotate_clockwise=True, frame_rate=30, vid_ext=vid_ext, video_filename="Ariane-RGB", output_dir=output_dir, status_var=status_var, gui_root=gui_root)
+        create_video(dir=ArianeRGB, aud_dir=audio_file, rotate_clockwise=True, frame_rate=RGB_FPS, vid_ext=vid_ext, video_filename="Ariane-RGB", output_dir=output_dir, status_var=status_var, gui_root=gui_root)
         print("Video for Ariane - RGB Camera created.")
         if status_var != None:
             status_var.set("Video for Ariane - RGB Camera created.")
@@ -196,7 +198,7 @@ def video_folder_extraction(dir: str, vid_ext:str, recording_profile: int = 15, 
         if status_var != None:
             status_var.set("Creating Video for Ariane - Left SLAM Camera...")
             gui_root.update()
-        create_video(dir=ArianeSLAM_Left, aud_dir=audio_file, rotate_clockwise=True, frame_rate=30, vid_ext=vid_ext, video_filename="Ariane-SLAM_L", output_dir=output_dir, status_var=status_var, gui_root=gui_root)
+        create_video(dir=ArianeSLAM_Left, aud_dir=audio_file, rotate_clockwise=True, frame_rate=SLAM_FPS, vid_ext=vid_ext, video_filename="Ariane-SLAM_L", output_dir=output_dir, status_var=status_var, gui_root=gui_root)
         print("Video for Ariane - Left SLAM Camera created.")
         if status_var != None:
             status_var.set("Video for Ariane - Left SLAM Camera created.")
@@ -206,7 +208,7 @@ def video_folder_extraction(dir: str, vid_ext:str, recording_profile: int = 15, 
         if status_var != None:
             status_var.set("Creating Video for Ariane - Right SLAM Camera...")
             gui_root.update()
-        create_video(dir=ArianeSLAM_Right, aud_dir=audio_file, rotate_clockwise=True, frame_rate=30, vid_ext=vid_ext, video_filename="Ariane-SLAM_R", output_dir=output_dir, status_var=status_var, gui_root=gui_root)
+        create_video(dir=ArianeSLAM_Right, aud_dir=audio_file, rotate_clockwise=True, frame_rate=SLAM_FPS, vid_ext=vid_ext, video_filename="Ariane-SLAM_R", output_dir=output_dir, status_var=status_var, gui_root=gui_root)
         print("Video for Ariane - Right SLAM Camera created.")
         if status_var != None:
             status_var.set("Video for Ariane - Right SLAM Camera created.")
@@ -215,7 +217,7 @@ def video_folder_extraction(dir: str, vid_ext:str, recording_profile: int = 15, 
         print("Creating Video for Ariane - Eye Camera...")
         status_var.set("Creating Video for Ariane - Eye Camera...")
         gui_root.update()
-        create_video(dir=ArianeEyeCam, aud_dir=audio_file, rotate_clockwise=False, frame_rate=10, vid_ext=vid_ext, video_filename="EYE-CAM", output_dir=output_dir, status_var=status_var, gui_root=gui_root)
+        create_video(dir=ArianeEyeCam, aud_dir=audio_file, rotate_clockwise=False, frame_rate=ET_FPS, vid_ext=vid_ext, video_filename="EYE-CAM", output_dir=output_dir, status_var=status_var, gui_root=gui_root)
         print("Video for Ariane - Eye Camera created.")
         if status_var != None:
             status_var.set("Video for Ariane - Eye Camera created.")
@@ -226,16 +228,678 @@ def video_folder_extraction(dir: str, vid_ext:str, recording_profile: int = 15, 
             status_var.set("Folder Processing Complete.")
             gui_root.update()
     
-# root = tk.Tk()
-# root.withdraw()
+    if recording_profile == 0: # Recording Profile 0
+        audio_file = f'{dir}/231-1/{os.listdir(dir + "/231-1/")[0]}'
+    
+        ArianeRGB = f"{dir}/214-1"
+        ArianeSLAM_Left = f"{dir}/1201-1"
+        ArianeSLAM_Right = f"{dir}/1201-2"
+        ArianeEyeCam = f"{dir}/211-1"
 
-"""
-create_video(dir=filedialog.askdirectory(),
-                aud_dir=filedialog.askopenfilename(), 
-                vid_ext="m4v", 
-                img_ext="jpg", 
-                rotate_clockwise=True, 
-                frame_rate=10)
-"""
 
-# video_folder_extraction(dir=filedialog.askdirectory())
+        RGB_FPS: int = 1
+        SLAM_FPS: int = 10
+        ET_FPS: int = 10
+
+        # Ariane RGB
+        print("Creating Video for Ariane - RGB Camera...")
+        if status_var != None:
+            status_var.set("Creating Video for Ariane - RGB Camera...")
+            gui_root.update()
+        create_video(dir=ArianeRGB, aud_dir=audio_file, rotate_clockwise=True, frame_rate=RGB_FPS, vid_ext=vid_ext, video_filename="Ariane-RGB", output_dir=output_dir, status_var=status_var, gui_root=gui_root)
+        print("Video for Ariane - RGB Camera created.")
+        if status_var != None:
+            status_var.set("Video for Ariane - RGB Camera created.")
+            gui_root.update()
+
+        # Ariane SLAM - Left
+        print("Creating Video for Ariane - Left SLAM Camera...")
+        if status_var != None:
+            status_var.set("Creating Video for Ariane - Left SLAM Camera...")
+            gui_root.update()
+        create_video(dir=ArianeSLAM_Left, aud_dir=audio_file, rotate_clockwise=True, frame_rate=SLAM_FPS, vid_ext=vid_ext, video_filename="Ariane-SLAM_L", output_dir=output_dir, status_var=status_var, gui_root=gui_root)
+        print("Video for Ariane - Left SLAM Camera created.")
+        if status_var != None:
+            status_var.set("Video for Ariane - Left SLAM Camera created.")
+            gui_root.update()
+
+        # Ariane SLAM - Right
+        print("Creating Video for Ariane - Right SLAM Camera...")
+        if status_var != None:
+            status_var.set("Creating Video for Ariane - Right SLAM Camera...")
+            gui_root.update()
+        create_video(dir=ArianeSLAM_Right, aud_dir=audio_file, rotate_clockwise=True, frame_rate=SLAM_FPS, vid_ext=vid_ext, video_filename="Ariane-SLAM_R", output_dir=output_dir, status_var=status_var, gui_root=gui_root)
+        print("Video for Ariane - Right SLAM Camera created.")
+        if status_var != None:
+            status_var.set("Video for Ariane - Right SLAM Camera created.")
+            gui_root.update()
+
+        # QVGA
+        print("Creating Video for Ariane - Eye Camera...")
+        status_var.set("Creating Video for Ariane - Eye Camera...")
+        gui_root.update()
+        create_video(dir=ArianeEyeCam, aud_dir=audio_file, rotate_clockwise=False, frame_rate=ET_FPS, vid_ext=vid_ext, video_filename="EYE-CAM", output_dir=output_dir, status_var=status_var, gui_root=gui_root)
+        print("Video for Ariane - Eye Camera created.")
+        if status_var != None:
+            status_var.set("Video for Ariane - Eye Camera created.")
+            gui_root.update()
+
+        print("Folder Processing Complete.")
+        if status_var != None:
+            status_var.set("Folder Processing Complete.")
+            gui_root.update()
+
+    if recording_profile == 12: # Recording Profile 12
+        audio_file = ""
+    
+        ArianeRGB = f"{dir}/214-1"
+        ArianeSLAM_Left = f"{dir}/1201-1"
+        ArianeSLAM_Right = f"{dir}/1201-2"
+        ArianeEyeCam = f"{dir}/211-1"
+
+        RGB_FPS: int = 10
+        SLAM_FPS: int = 10
+        ET_FPS: int = 10
+
+        # Ariane RGB
+        print("Creating Video for Ariane - RGB Camera...")
+        if status_var != None:
+            status_var.set("Creating Video for Ariane - RGB Camera...")
+            gui_root.update()
+        create_video(dir=ArianeRGB, aud_dir=audio_file, rotate_clockwise=True, frame_rate=RGB_FPS, vid_ext=vid_ext, video_filename="Ariane-RGB", output_dir=output_dir, status_var=status_var, gui_root=gui_root)
+        print("Video for Ariane - RGB Camera created.")
+        if status_var != None:
+            status_var.set("Video for Ariane - RGB Camera created.")
+            gui_root.update()
+
+        # Ariane SLAM - Left
+        print("Creating Video for Ariane - Left SLAM Camera...")
+        if status_var != None:
+            status_var.set("Creating Video for Ariane - Left SLAM Camera...")
+            gui_root.update()
+        create_video(dir=ArianeSLAM_Left, aud_dir=audio_file, rotate_clockwise=True, frame_rate=SLAM_FPS, vid_ext=vid_ext, video_filename="Ariane-SLAM_L", output_dir=output_dir, status_var=status_var, gui_root=gui_root)
+        print("Video for Ariane - Left SLAM Camera created.")
+        if status_var != None:
+            status_var.set("Video for Ariane - Left SLAM Camera created.")
+            gui_root.update()
+
+        # Ariane SLAM - Right
+        print("Creating Video for Ariane - Right SLAM Camera...")
+        if status_var != None:
+            status_var.set("Creating Video for Ariane - Right SLAM Camera...")
+            gui_root.update()
+        create_video(dir=ArianeSLAM_Right, aud_dir=audio_file, rotate_clockwise=True, frame_rate=SLAM_FPS, vid_ext=vid_ext, video_filename="Ariane-SLAM_R", output_dir=output_dir, status_var=status_var, gui_root=gui_root)
+        print("Video for Ariane - Right SLAM Camera created.")
+        if status_var != None:
+            status_var.set("Video for Ariane - Right SLAM Camera created.")
+            gui_root.update()
+
+        # QVGA
+        print("Creating Video for Ariane - Eye Camera...")
+        status_var.set("Creating Video for Ariane - Eye Camera...")
+        gui_root.update()
+        create_video(dir=ArianeEyeCam, aud_dir=audio_file, rotate_clockwise=False, frame_rate=ET_FPS, vid_ext=vid_ext, video_filename="EYE-CAM", output_dir=output_dir, status_var=status_var, gui_root=gui_root)
+        print("Video for Ariane - Eye Camera created.")
+        if status_var != None:
+            status_var.set("Video for Ariane - Eye Camera created.")
+            gui_root.update()
+
+        print("Folder Processing Complete.")
+        if status_var != None:
+            status_var.set("Folder Processing Complete.")
+            gui_root.update()
+
+    if recording_profile == 2: # Recording Profile 2
+        audio_file = ""
+    
+        ArianeRGB = f"{dir}/214-1"
+        ArianeSLAM_Left = f"{dir}/1201-1"
+        ArianeSLAM_Right = f"{dir}/1201-2"
+
+
+        RGB_FPS: int = 20
+        SLAM_FPS: int = 20
+
+        # Ariane RGB
+        print("Creating Video for Ariane - RGB Camera...")
+        if status_var != None:
+            status_var.set("Creating Video for Ariane - RGB Camera...")
+            gui_root.update()
+        create_video(dir=ArianeRGB, aud_dir=audio_file, rotate_clockwise=True, frame_rate=RGB_FPS, vid_ext=vid_ext, video_filename="Ariane-RGB", output_dir=output_dir, status_var=status_var, gui_root=gui_root)
+        print("Video for Ariane - RGB Camera created.")
+        if status_var != None:
+            status_var.set("Video for Ariane - RGB Camera created.")
+            gui_root.update()
+
+        # Ariane SLAM - Left
+        print("Creating Video for Ariane - Left SLAM Camera...")
+        if status_var != None:
+            status_var.set("Creating Video for Ariane - Left SLAM Camera...")
+            gui_root.update()
+        create_video(dir=ArianeSLAM_Left, aud_dir=audio_file, rotate_clockwise=True, frame_rate=SLAM_FPS, vid_ext=vid_ext, video_filename="Ariane-SLAM_L", output_dir=output_dir, status_var=status_var, gui_root=gui_root)
+        print("Video for Ariane - Left SLAM Camera created.")
+        if status_var != None:
+            status_var.set("Video for Ariane - Left SLAM Camera created.")
+            gui_root.update()
+
+        # Ariane SLAM - Right
+        print("Creating Video for Ariane - Right SLAM Camera...")
+        if status_var != None:
+            status_var.set("Creating Video for Ariane - Right SLAM Camera...")
+            gui_root.update()
+        create_video(dir=ArianeSLAM_Right, aud_dir=audio_file, rotate_clockwise=True, frame_rate=SLAM_FPS, vid_ext=vid_ext, video_filename="Ariane-SLAM_R", output_dir=output_dir, status_var=status_var, gui_root=gui_root)
+        print("Video for Ariane - Right SLAM Camera created.")
+        if status_var != None:
+            status_var.set("Video for Ariane - Right SLAM Camera created.")
+            gui_root.update()
+
+
+        print("Folder Processing Complete.")
+        if status_var != None:
+            status_var.set("Folder Processing Complete.")
+            gui_root.update()
+
+    if recording_profile == 4: # Recording Profile 4
+        audio_file = f'{dir}/231-1/{os.listdir(dir + "/231-1/")[0]}'
+    
+        ArianeRGB = f"{dir}/214-1"
+
+
+        RGB_FPS: int = 10
+
+        # Ariane RGB
+        print("Creating Video for Ariane - RGB Camera...")
+        if status_var != None:
+            status_var.set("Creating Video for Ariane - RGB Camera...")
+            gui_root.update()
+        create_video(dir=ArianeRGB, aud_dir=audio_file, rotate_clockwise=True, frame_rate=RGB_FPS, vid_ext=vid_ext, video_filename="Ariane-RGB", output_dir=output_dir, status_var=status_var, gui_root=gui_root)
+        print("Video for Ariane - RGB Camera created.")
+        if status_var != None:
+            status_var.set("Video for Ariane - RGB Camera created.")
+            gui_root.update()
+
+        print("Folder Processing Complete.")
+        if status_var != None:
+            status_var.set("Folder Processing Complete.")
+            gui_root.update()
+
+    if recording_profile == 5: # Recording Profile 5
+        audio_file = ""
+        ArianeRGB = f"{dir}/214-1"
+        ArianeEyeCam = f"{dir}/211-1"
+
+
+        RGB_FPS: int = 20
+        ET_FPS: int = 20
+
+        # Ariane RGB
+        print("Creating Video for Ariane - RGB Camera...")
+        if status_var != None:
+            status_var.set("Creating Video for Ariane - RGB Camera...")
+            gui_root.update()
+        create_video(dir=ArianeRGB, aud_dir=audio_file, rotate_clockwise=True, frame_rate=RGB_FPS, vid_ext=vid_ext, video_filename="Ariane-RGB", output_dir=output_dir, status_var=status_var, gui_root=gui_root)
+        print("Video for Ariane - RGB Camera created.")
+        if status_var != None:
+            status_var.set("Video for Ariane - RGB Camera created.")
+            gui_root.update()
+
+        # QVGA
+        print("Creating Video for Ariane - Eye Camera...")
+        status_var.set("Creating Video for Ariane - Eye Camera...")
+        gui_root.update()
+        create_video(dir=ArianeEyeCam, aud_dir=audio_file, rotate_clockwise=False, frame_rate=ET_FPS, vid_ext=vid_ext, video_filename="EYE-CAM", output_dir=output_dir, status_var=status_var, gui_root=gui_root)
+        print("Video for Ariane - Eye Camera created.")
+        if status_var != None:
+            status_var.set("Video for Ariane - Eye Camera created.")
+            gui_root.update()
+
+        print("Folder Processing Complete.")
+        if status_var != None:
+            status_var.set("Folder Processing Complete.")
+            gui_root.update()
+
+    if recording_profile == 9: # Recording Profile 9
+        audio_file = f'{dir}/231-1/{os.listdir(dir + "/231-1/")[0]}'
+    
+        ArianeRGB = f"{dir}/214-1"
+        ArianeSLAM_Left = f"{dir}/1201-1"
+        ArianeSLAM_Right = f"{dir}/1201-2"
+        ArianeEyeCam = f"{dir}/211-1"
+
+
+        RGB_FPS: int = 20
+        SLAM_FPS: int = 10
+        ET_FPS: int = 10
+
+        # Ariane RGB
+        print("Creating Video for Ariane - RGB Camera...")
+        if status_var != None:
+            status_var.set("Creating Video for Ariane - RGB Camera...")
+            gui_root.update()
+        create_video(dir=ArianeRGB, aud_dir=audio_file, rotate_clockwise=True, frame_rate=RGB_FPS, vid_ext=vid_ext, video_filename="Ariane-RGB", output_dir=output_dir, status_var=status_var, gui_root=gui_root)
+        print("Video for Ariane - RGB Camera created.")
+        if status_var != None:
+            status_var.set("Video for Ariane - RGB Camera created.")
+            gui_root.update()
+
+        # Ariane SLAM - Left
+        print("Creating Video for Ariane - Left SLAM Camera...")
+        if status_var != None:
+            status_var.set("Creating Video for Ariane - Left SLAM Camera...")
+            gui_root.update()
+        create_video(dir=ArianeSLAM_Left, aud_dir=audio_file, rotate_clockwise=True, frame_rate=SLAM_FPS, vid_ext=vid_ext, video_filename="Ariane-SLAM_L", output_dir=output_dir, status_var=status_var, gui_root=gui_root)
+        print("Video for Ariane - Left SLAM Camera created.")
+        if status_var != None:
+            status_var.set("Video for Ariane - Left SLAM Camera created.")
+            gui_root.update()
+
+        # Ariane SLAM - Right
+        print("Creating Video for Ariane - Right SLAM Camera...")
+        if status_var != None:
+            status_var.set("Creating Video for Ariane - Right SLAM Camera...")
+            gui_root.update()
+        create_video(dir=ArianeSLAM_Right, aud_dir=audio_file, rotate_clockwise=True, frame_rate=SLAM_FPS, vid_ext=vid_ext, video_filename="Ariane-SLAM_R", output_dir=output_dir, status_var=status_var, gui_root=gui_root)
+        print("Video for Ariane - Right SLAM Camera created.")
+        if status_var != None:
+            status_var.set("Video for Ariane - Right SLAM Camera created.")
+            gui_root.update()
+
+        # QVGA
+        print("Creating Video for Ariane - Eye Camera...")
+        status_var.set("Creating Video for Ariane - Eye Camera...")
+        gui_root.update()
+        create_video(dir=ArianeEyeCam, aud_dir=audio_file, rotate_clockwise=False, frame_rate=ET_FPS, vid_ext=vid_ext, video_filename="EYE-CAM", output_dir=output_dir, status_var=status_var, gui_root=gui_root)
+        print("Video for Ariane - Eye Camera created.")
+        if status_var != None:
+            status_var.set("Video for Ariane - Eye Camera created.")
+            gui_root.update()
+
+        print("Folder Processing Complete.")
+        if status_var != None:
+            status_var.set("Folder Processing Complete.")
+            gui_root.update()
+
+    if recording_profile == 10: # Recording Profile 10
+        audio_file = f'{dir}/231-1/{os.listdir(dir + "/231-1/")[0]}'
+    
+        ArianeRGB = f"{dir}/214-1"
+        ArianeSLAM_Left = f"{dir}/1201-1"
+        ArianeSLAM_Right = f"{dir}/1201-2"
+        ArianeEyeCam = f"{dir}/211-1"
+
+
+        RGB_FPS: int = 10
+        SLAM_FPS: int = 10
+        ET_FPS: int = 10
+
+        # Ariane RGB
+        print("Creating Video for Ariane - RGB Camera...")
+        if status_var != None:
+            status_var.set("Creating Video for Ariane - RGB Camera...")
+            gui_root.update()
+        create_video(dir=ArianeRGB, aud_dir=audio_file, rotate_clockwise=True, frame_rate=RGB_FPS, vid_ext=vid_ext, video_filename="Ariane-RGB", output_dir=output_dir, status_var=status_var, gui_root=gui_root)
+        print("Video for Ariane - RGB Camera created.")
+        if status_var != None:
+            status_var.set("Video for Ariane - RGB Camera created.")
+            gui_root.update()
+
+        # Ariane SLAM - Left
+        print("Creating Video for Ariane - Left SLAM Camera...")
+        if status_var != None:
+            status_var.set("Creating Video for Ariane - Left SLAM Camera...")
+            gui_root.update()
+        create_video(dir=ArianeSLAM_Left, aud_dir=audio_file, rotate_clockwise=True, frame_rate=SLAM_FPS, vid_ext=vid_ext, video_filename="Ariane-SLAM_L", output_dir=output_dir, status_var=status_var, gui_root=gui_root)
+        print("Video for Ariane - Left SLAM Camera created.")
+        if status_var != None:
+            status_var.set("Video for Ariane - Left SLAM Camera created.")
+            gui_root.update()
+
+        # Ariane SLAM - Right
+        print("Creating Video for Ariane - Right SLAM Camera...")
+        if status_var != None:
+            status_var.set("Creating Video for Ariane - Right SLAM Camera...")
+            gui_root.update()
+        create_video(dir=ArianeSLAM_Right, aud_dir=audio_file, rotate_clockwise=True, frame_rate=SLAM_FPS, vid_ext=vid_ext, video_filename="Ariane-SLAM_R", output_dir=output_dir, status_var=status_var, gui_root=gui_root)
+        print("Video for Ariane - Right SLAM Camera created.")
+        if status_var != None:
+            status_var.set("Video for Ariane - Right SLAM Camera created.")
+            gui_root.update()
+
+        # QVGA
+        print("Creating Video for Ariane - Eye Camera...")
+        status_var.set("Creating Video for Ariane - Eye Camera...")
+        gui_root.update()
+        create_video(dir=ArianeEyeCam, aud_dir=audio_file, rotate_clockwise=False, frame_rate=ET_FPS, vid_ext=vid_ext, video_filename="EYE-CAM", output_dir=output_dir, status_var=status_var, gui_root=gui_root)
+        print("Video for Ariane - Eye Camera created.")
+        if status_var != None:
+            status_var.set("Video for Ariane - Eye Camera created.")
+            gui_root.update()
+
+        print("Folder Processing Complete.")
+        if status_var != None:
+            status_var.set("Folder Processing Complete.")
+            gui_root.update()
+
+    if recording_profile == 14: # Recording Profile 14
+        audio_file = ""
+    
+        ArianeRGB = f"{dir}/214-1"
+        ArianeSLAM_Left = f"{dir}/1201-1"
+        ArianeSLAM_Right = f"{dir}/1201-2"
+        ArianeEyeCam = f"{dir}/211-1"
+
+        RGB_FPS: int = 1
+        SLAM_FPS: int = 30
+        ET_FPS: int = 30
+
+        # Ariane RGB
+        print("Creating Video for Ariane - RGB Camera...")
+        if status_var != None:
+            status_var.set("Creating Video for Ariane - RGB Camera...")
+            gui_root.update()
+        create_video(dir=ArianeRGB, aud_dir=audio_file, rotate_clockwise=True, frame_rate=RGB_FPS, vid_ext=vid_ext, video_filename="Ariane-RGB", output_dir=output_dir, status_var=status_var, gui_root=gui_root)
+        print("Video for Ariane - RGB Camera created.")
+        if status_var != None:
+            status_var.set("Video for Ariane - RGB Camera created.")
+            gui_root.update()
+
+        # Ariane SLAM - Left
+        print("Creating Video for Ariane - Left SLAM Camera...")
+        if status_var != None:
+            status_var.set("Creating Video for Ariane - Left SLAM Camera...")
+            gui_root.update()
+        create_video(dir=ArianeSLAM_Left, aud_dir=audio_file, rotate_clockwise=True, frame_rate=SLAM_FPS, vid_ext=vid_ext, video_filename="Ariane-SLAM_L", output_dir=output_dir, status_var=status_var, gui_root=gui_root)
+        print("Video for Ariane - Left SLAM Camera created.")
+        if status_var != None:
+            status_var.set("Video for Ariane - Left SLAM Camera created.")
+            gui_root.update()
+
+        # Ariane SLAM - Right
+        print("Creating Video for Ariane - Right SLAM Camera...")
+        if status_var != None:
+            status_var.set("Creating Video for Ariane - Right SLAM Camera...")
+            gui_root.update()
+        create_video(dir=ArianeSLAM_Right, aud_dir=audio_file, rotate_clockwise=True, frame_rate=SLAM_FPS, vid_ext=vid_ext, video_filename="Ariane-SLAM_R", output_dir=output_dir, status_var=status_var, gui_root=gui_root)
+        print("Video for Ariane - Right SLAM Camera created.")
+        if status_var != None:
+            status_var.set("Video for Ariane - Right SLAM Camera created.")
+            gui_root.update()
+
+        # QVGA
+        print("Creating Video for Ariane - Eye Camera...")
+        status_var.set("Creating Video for Ariane - Eye Camera...")
+        gui_root.update()
+        create_video(dir=ArianeEyeCam, aud_dir=audio_file, rotate_clockwise=False, frame_rate=ET_FPS, vid_ext=vid_ext, video_filename="EYE-CAM", output_dir=output_dir, status_var=status_var, gui_root=gui_root)
+        print("Video for Ariane - Eye Camera created.")
+        if status_var != None:
+            status_var.set("Video for Ariane - Eye Camera created.")
+            gui_root.update()
+
+        print("Folder Processing Complete.")
+        if status_var != None:
+            status_var.set("Folder Processing Complete.")
+            gui_root.update()
+
+    if recording_profile == 8: # Recording Profile 8
+        audio_file = f'{dir}/231-1/{os.listdir(dir + "/231-1/")[0]}'
+    
+        ArianeRGB = f"{dir}/214-1"
+        ArianeSLAM_Left = f"{dir}/1201-1"
+        ArianeSLAM_Right = f"{dir}/1201-2"
+        ArianeEyeCam = f"{dir}/211-1"
+
+        RGB_FPS: int = 5
+        SLAM_FPS: int = 15
+        ET_FPS: int = 30
+
+        # Ariane RGB
+        print("Creating Video for Ariane - RGB Camera...")
+        if status_var != None:
+            status_var.set("Creating Video for Ariane - RGB Camera...")
+            gui_root.update()
+        create_video(dir=ArianeRGB, aud_dir=audio_file, rotate_clockwise=True, frame_rate=RGB_FPS, vid_ext=vid_ext, video_filename="Ariane-RGB", output_dir=output_dir, status_var=status_var, gui_root=gui_root)
+        print("Video for Ariane - RGB Camera created.")
+        if status_var != None:
+            status_var.set("Video for Ariane - RGB Camera created.")
+            gui_root.update()
+
+        # Ariane SLAM - Left
+        print("Creating Video for Ariane - Left SLAM Camera...")
+        if status_var != None:
+            status_var.set("Creating Video for Ariane - Left SLAM Camera...")
+            gui_root.update()
+        create_video(dir=ArianeSLAM_Left, aud_dir=audio_file, rotate_clockwise=True, frame_rate=SLAM_FPS, vid_ext=vid_ext, video_filename="Ariane-SLAM_L", output_dir=output_dir, status_var=status_var, gui_root=gui_root)
+        print("Video for Ariane - Left SLAM Camera created.")
+        if status_var != None:
+            status_var.set("Video for Ariane - Left SLAM Camera created.")
+            gui_root.update()
+
+        # Ariane SLAM - Right
+        print("Creating Video for Ariane - Right SLAM Camera...")
+        if status_var != None:
+            status_var.set("Creating Video for Ariane - Right SLAM Camera...")
+            gui_root.update()
+        create_video(dir=ArianeSLAM_Right, aud_dir=audio_file, rotate_clockwise=True, frame_rate=SLAM_FPS, vid_ext=vid_ext, video_filename="Ariane-SLAM_R", output_dir=output_dir, status_var=status_var, gui_root=gui_root)
+        print("Video for Ariane - Right SLAM Camera created.")
+        if status_var != None:
+            status_var.set("Video for Ariane - Right SLAM Camera created.")
+            gui_root.update()
+
+        # QVGA
+        print("Creating Video for Ariane - Eye Camera...")
+        status_var.set("Creating Video for Ariane - Eye Camera...")
+        gui_root.update()
+        create_video(dir=ArianeEyeCam, aud_dir=audio_file, rotate_clockwise=False, frame_rate=ET_FPS, vid_ext=vid_ext, video_filename="EYE-CAM", output_dir=output_dir, status_var=status_var, gui_root=gui_root)
+        print("Video for Ariane - Eye Camera created.")
+        if status_var != None:
+            status_var.set("Video for Ariane - Eye Camera created.")
+            gui_root.update()
+
+        print("Folder Processing Complete.")
+        if status_var != None:
+            status_var.set("Folder Processing Complete.")
+            gui_root.update()
+
+    if recording_profile == 16: # Recording Profile 16
+        audio_file = f'{dir}/231-1/{os.listdir(dir + "/231-1/")[0]}'
+    
+        ArianeRGB = f"{dir}/214-1"
+        ArianeEyeCam = f"{dir}/211-1"
+
+        RGB_FPS: int = 10
+        ET_FPS: int = 90
+
+        # Ariane RGB
+        print("Creating Video for Ariane - RGB Camera...")
+        if status_var != None:
+            status_var.set("Creating Video for Ariane - RGB Camera...")
+            gui_root.update()
+        create_video(dir=ArianeRGB, aud_dir=audio_file, rotate_clockwise=True, frame_rate=RGB_FPS, vid_ext=vid_ext, video_filename="Ariane-RGB", output_dir=output_dir, status_var=status_var, gui_root=gui_root)
+        print("Video for Ariane - RGB Camera created.")
+        if status_var != None:
+            status_var.set("Video for Ariane - RGB Camera created.")
+            gui_root.update()
+
+        # QVGA
+        print("Creating Video for Ariane - Eye Camera...")
+        status_var.set("Creating Video for Ariane - Eye Camera...")
+        gui_root.update()
+        create_video(dir=ArianeEyeCam, aud_dir=audio_file, rotate_clockwise=False, frame_rate=ET_FPS, vid_ext=vid_ext, video_filename="EYE-CAM", output_dir=output_dir, status_var=status_var, gui_root=gui_root)
+        print("Video for Ariane - Eye Camera created.")
+        if status_var != None:
+            status_var.set("Video for Ariane - Eye Camera created.")
+            gui_root.update()
+
+        print("Folder Processing Complete.")
+        if status_var != None:
+            status_var.set("Folder Processing Complete.")
+            gui_root.update()  
+        
+    if recording_profile == 18: # Recording Profile 18
+        audio_file = f'{dir}/231-1/{os.listdir(dir + "/231-1/")[0]}'
+    
+        ArianeRGB = f"{dir}/214-1"
+        ArianeSLAM_Left = f"{dir}/1201-1"
+        ArianeSLAM_Right = f"{dir}/1201-2"
+        ArianeEyeCam = f"{dir}/211-1"
+
+        RGB_FPS: int = 10
+        SLAM_FPS: int = 10
+        ET_FPS: int = 10
+
+        # Ariane RGB
+        print("Creating Video for Ariane - RGB Camera...")
+        if status_var != None:
+            status_var.set("Creating Video for Ariane - RGB Camera...")
+            gui_root.update()
+        create_video(dir=ArianeRGB, aud_dir=audio_file, rotate_clockwise=True, frame_rate=RGB_FPS, vid_ext=vid_ext, video_filename="Ariane-RGB", output_dir=output_dir, status_var=status_var, gui_root=gui_root)
+        print("Video for Ariane - RGB Camera created.")
+        if status_var != None:
+            status_var.set("Video for Ariane - RGB Camera created.")
+            gui_root.update()
+
+        # Ariane SLAM - Left
+        print("Creating Video for Ariane - Left SLAM Camera...")
+        if status_var != None:
+            status_var.set("Creating Video for Ariane - Left SLAM Camera...")
+            gui_root.update()
+        create_video(dir=ArianeSLAM_Left, aud_dir=audio_file, rotate_clockwise=True, frame_rate=SLAM_FPS, vid_ext=vid_ext, video_filename="Ariane-SLAM_L", output_dir=output_dir, status_var=status_var, gui_root=gui_root)
+        print("Video for Ariane - Left SLAM Camera created.")
+        if status_var != None:
+            status_var.set("Video for Ariane - Left SLAM Camera created.")
+            gui_root.update()
+
+        # Ariane SLAM - Right
+        print("Creating Video for Ariane - Right SLAM Camera...")
+        if status_var != None:
+            status_var.set("Creating Video for Ariane - Right SLAM Camera...")
+            gui_root.update()
+        create_video(dir=ArianeSLAM_Right, aud_dir=audio_file, rotate_clockwise=True, frame_rate=SLAM_FPS, vid_ext=vid_ext, video_filename="Ariane-SLAM_R", output_dir=output_dir, status_var=status_var, gui_root=gui_root)
+        print("Video for Ariane - Right SLAM Camera created.")
+        if status_var != None:
+            status_var.set("Video for Ariane - Right SLAM Camera created.")
+            gui_root.update()
+
+        # QVGA
+        print("Creating Video for Ariane - Eye Camera...")
+        status_var.set("Creating Video for Ariane - Eye Camera...")
+        gui_root.update()
+        create_video(dir=ArianeEyeCam, aud_dir=audio_file, rotate_clockwise=False, frame_rate=ET_FPS, vid_ext=vid_ext, video_filename="EYE-CAM", output_dir=output_dir, status_var=status_var, gui_root=gui_root)
+        print("Video for Ariane - Eye Camera created.")
+        if status_var != None:
+            status_var.set("Video for Ariane - Eye Camera created.")
+            gui_root.update()
+
+        print("Folder Processing Complete.")
+        if status_var != None:
+            status_var.set("Folder Processing Complete.")
+            gui_root.update()
+
+    if recording_profile == 19: # Recording Profile 19
+        audio_file = ""
+    
+        ArianeRGB = f"{dir}/214-1"
+        ArianeSLAM_Left = f"{dir}/1201-1"
+        ArianeSLAM_Right = f"{dir}/1201-2"
+
+        RGB_FPS: int = 10
+        SLAM_FPS: int = 10
+
+        # Ariane RGB
+        print("Creating Video for Ariane - RGB Camera...")
+        if status_var != None:
+            status_var.set("Creating Video for Ariane - RGB Camera...")
+            gui_root.update()
+        create_video(dir=ArianeRGB, aud_dir=audio_file, rotate_clockwise=True, frame_rate=RGB_FPS, vid_ext=vid_ext, video_filename="Ariane-RGB", output_dir=output_dir, status_var=status_var, gui_root=gui_root)
+        print("Video for Ariane - RGB Camera created.")
+        if status_var != None:
+            status_var.set("Video for Ariane - RGB Camera created.")
+            gui_root.update()
+
+        # Ariane SLAM - Left
+        print("Creating Video for Ariane - Left SLAM Camera...")
+        if status_var != None:
+            status_var.set("Creating Video for Ariane - Left SLAM Camera...")
+            gui_root.update()
+        create_video(dir=ArianeSLAM_Left, aud_dir=audio_file, rotate_clockwise=True, frame_rate=SLAM_FPS, vid_ext=vid_ext, video_filename="Ariane-SLAM_L", output_dir=output_dir, status_var=status_var, gui_root=gui_root)
+        print("Video for Ariane - Left SLAM Camera created.")
+        if status_var != None:
+            status_var.set("Video for Ariane - Left SLAM Camera created.")
+            gui_root.update()
+
+        # Ariane SLAM - Right
+        print("Creating Video for Ariane - Right SLAM Camera...")
+        if status_var != None:
+            status_var.set("Creating Video for Ariane - Right SLAM Camera...")
+            gui_root.update()
+        create_video(dir=ArianeSLAM_Right, aud_dir=audio_file, rotate_clockwise=True, frame_rate=SLAM_FPS, vid_ext=vid_ext, video_filename="Ariane-SLAM_R", output_dir=output_dir, status_var=status_var, gui_root=gui_root)
+        print("Video for Ariane - Right SLAM Camera created.")
+        if status_var != None:
+            status_var.set("Video for Ariane - Right SLAM Camera created.")
+            gui_root.update()
+
+
+        print("Folder Processing Complete.")
+        if status_var != None:
+            status_var.set("Folder Processing Complete.")
+            gui_root.update()
+
+    if recording_profile == 21: # Recording Profile 8
+        audio_file = f'{dir}/231-1/{os.listdir(dir + "/231-1/")[0]}'
+    
+        ArianeRGB = f"{dir}/214-1"
+        ArianeSLAM_Left = f"{dir}/1201-1"
+        ArianeSLAM_Right = f"{dir}/1201-2"
+        ArianeEyeCam = f"{dir}/211-1"
+
+        RGB_FPS: int = 15
+        SLAM_FPS: int = 15
+        ET_FPS: int = 30
+
+        # Ariane RGB
+        print("Creating Video for Ariane - RGB Camera...")
+        if status_var != None:
+            status_var.set("Creating Video for Ariane - RGB Camera...")
+            gui_root.update()
+        create_video(dir=ArianeRGB, aud_dir=audio_file, rotate_clockwise=True, frame_rate=RGB_FPS, vid_ext=vid_ext, video_filename="Ariane-RGB", output_dir=output_dir, status_var=status_var, gui_root=gui_root)
+        print("Video for Ariane - RGB Camera created.")
+        if status_var != None:
+            status_var.set("Video for Ariane - RGB Camera created.")
+            gui_root.update()
+
+        # Ariane SLAM - Left
+        print("Creating Video for Ariane - Left SLAM Camera...")
+        if status_var != None:
+            status_var.set("Creating Video for Ariane - Left SLAM Camera...")
+            gui_root.update()
+        create_video(dir=ArianeSLAM_Left, aud_dir=audio_file, rotate_clockwise=True, frame_rate=SLAM_FPS, vid_ext=vid_ext, video_filename="Ariane-SLAM_L", output_dir=output_dir, status_var=status_var, gui_root=gui_root)
+        print("Video for Ariane - Left SLAM Camera created.")
+        if status_var != None:
+            status_var.set("Video for Ariane - Left SLAM Camera created.")
+            gui_root.update()
+
+        # Ariane SLAM - Right
+        print("Creating Video for Ariane - Right SLAM Camera...")
+        if status_var != None:
+            status_var.set("Creating Video for Ariane - Right SLAM Camera...")
+            gui_root.update()
+        create_video(dir=ArianeSLAM_Right, aud_dir=audio_file, rotate_clockwise=True, frame_rate=SLAM_FPS, vid_ext=vid_ext, video_filename="Ariane-SLAM_R", output_dir=output_dir, status_var=status_var, gui_root=gui_root)
+        print("Video for Ariane - Right SLAM Camera created.")
+        if status_var != None:
+            status_var.set("Video for Ariane - Right SLAM Camera created.")
+            gui_root.update()
+
+        # QVGA
+        print("Creating Video for Ariane - Eye Camera...")
+        status_var.set("Creating Video for Ariane - Eye Camera...")
+        gui_root.update()
+        create_video(dir=ArianeEyeCam, aud_dir=audio_file, rotate_clockwise=False, frame_rate=ET_FPS, vid_ext=vid_ext, video_filename="EYE-CAM", output_dir=output_dir, status_var=status_var, gui_root=gui_root)
+        print("Video for Ariane - Eye Camera created.")
+        if status_var != None:
+            status_var.set("Video for Ariane - Eye Camera created.")
+            gui_root.update()
+
+        print("Folder Processing Complete.")
+        if status_var != None:
+            status_var.set("Folder Processing Complete.")
+            gui_root.update()
