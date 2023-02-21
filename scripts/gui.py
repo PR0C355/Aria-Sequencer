@@ -28,10 +28,10 @@ root.geometry("1920x1080")
 root.configure(bg=BLACK)
 
 
-MAIN_MENU_FONT = font.Font(family='Broadway', size=100)
-SUBTITLE_FONT = font.Font(family='Broadway', size=25)
-STATUS_FONT = font.Font(family='Broadway', size=30)
-LARGE_BUTTON_FONT = font.Font(family='Broadway', size=50)
+MAIN_MENU_FONT = font.Font(family='Serif', size=100)
+SUBTITLE_FONT = font.Font(family='Serif', size=25)
+STATUS_FONT = font.Font(family='Serif', size=30)
+LARGE_BUTTON_FONT = font.Font(family='Serif', size=50)
 
 
 
@@ -179,7 +179,6 @@ def video_creator():
         image_directory_frame,
         text = "Choose Directory",
         font = SUBTITLE_FONT,
-        borderwidth=0,
         bg = BUTTON_BG,
         fg = BUTTON_FG,
         # image=CHOOSE_DIRECTORY_IMAGE,
@@ -259,13 +258,17 @@ def video_creator():
     )   
     selected_audio_file_button.pack(side=LEFT)
 
+
+    # Video Extension
+
     global video_extension_frame
     video_extension_frame = tk.Frame(root, bg=BLACK)
     video_extension_frame.pack()
 
-    # Video Extension
+
     global selected_video_extension_label
     global selected_video_extension_entry
+    global extension_clockwise_divider
 
     selected_video_extension_label = tk.Label(
         video_extension_frame,
@@ -284,6 +287,16 @@ def video_creator():
         command = lambda x: selected_video_extension.set(x)
     )
     selected_video_extension_entry.pack(side=LEFT)
+
+    extension_clockwise_divider = tk.Label(
+        video_extension_frame,
+        text="       ",
+        # width=50,
+        font=SUBTITLE_FONT,
+        background=LABEL_BG,
+        fg=LABEL_FG
+    )
+    extension_clockwise_divider.pack(side=LEFT)
 
     # Clockwise
     global selected_clockwise_button
