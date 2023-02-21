@@ -10,12 +10,14 @@ import Sequencer as Sequencer
 BLACK: str = "black"
 WHITE: str = "white"
 
-TITLE_FG: str = "white"
-TITLE_BG: str = "black"
-LABEL_FG: str = "white"
-LABEL_BG: str = "black"
-ENTRY_FG: str = "white"
-ENTRY_BG: str = "black"
+TITLE_FG: str = WHITE
+TITLE_BG: str = BLACK
+LABEL_FG: str = WHITE
+LABEL_BG: str = BLACK
+ENTRY_FG: str = WHITE
+ENTRY_BG: str = BLACK
+BUTTON_BG: str = WHITE
+BUTTON_FG: str = BLACK
 
 ENTRY_WIDTH: int = 44
 
@@ -73,8 +75,8 @@ def main_page():
         root,
         text = "Sequence Images",
         font = SUBTITLE_FONT,
-        bg = "#63666A",
-        fg = "black",
+        bg = BUTTON_BG,
+        fg = BUTTON_FG,
         image=SEQUENCE_IMAGE,
         command = main_to_video_creator,
     )
@@ -84,8 +86,8 @@ def main_page():
         root,
         text = "Sequence Exported Folder",
         font = SUBTITLE_FONT,
-        bg = "#63666A",
-        fg = "black",
+        bg = BUTTON_BG,
+        fg = BUTTON_FG,
         image=SEQUENCE_FOLDER_IMAGE,
         command = main_to_folder_processor,
     )
@@ -178,7 +180,8 @@ def video_creator():
         text = "Choose Directory",
         font = SUBTITLE_FONT,
         borderwidth=0,
-        bg = BLACK,
+        bg = BUTTON_BG,
+        fg = BUTTON_FG,
         # image=CHOOSE_DIRECTORY_IMAGE,
         command = lambda: selected_image_directory.set(f"{fd.askdirectory()}")
     )
@@ -249,7 +252,8 @@ def video_creator():
         audio_file_frame,
         text = "Choose File",
         font = SUBTITLE_FONT,
-        bg = BLACK,
+        bg = BUTTON_BG,
+        fg = BUTTON_FG,
         # image=CHOOSE_DIRECTORY_IMAGE,
         command = lambda: selected_audio_file.set(f"{fd.askopenfilename()}")
     )   
@@ -292,8 +296,8 @@ def video_creator():
         onvalue=True,
         offvalue=False,
         font=SUBTITLE_FONT,
-        bg="black",
-        fg="white",
+        bg=BLACK,
+        fg=WHITE,
     )
     selected_clockwise_button.pack()
 
@@ -362,7 +366,8 @@ def video_creator():
         selected_output_directory_frame,
         text = "Choose Directory",
         font = SUBTITLE_FONT,
-        bg = BLACK,
+        bg = BUTTON_BG,
+        fg = BUTTON_FG,
         # image=CHOOSE_DIRECTORY_IMAGE,
         command = lambda: selected_output_directory.set(f"{fd.askdirectory()}")
     )
@@ -391,8 +396,8 @@ def video_creator():
         bottom_frame,
         text = "Create Video",
         font = SUBTITLE_FONT,
-        bg = "#63666A",
-        fg = "black",
+        bg = BUTTON_BG,
+        fg = BUTTON_FG,
         image=CREATE_VIDEO_IMAGE,
         command = lambda: Sequencer.create_video(dir=selected_image_directory.get(), output_dir=selected_output_directory.get(), video_filename=selected_video_filename.get(), aud_dir=selected_audio_file.get(), vid_ext=selected_video_extension.get(), rotate_clockwise=selected_clockwise.get(), frame_rate=selected_frame_rate.get(), status_var=download_status, gui_root=root)
     )
@@ -404,8 +409,8 @@ def video_creator():
         bottom_frame,
         text = "Back",
         font = SUBTITLE_FONT,
-        bg = "#63666A",
-        fg = "black",
+        bg = BUTTON_BG,
+        fg = BUTTON_FG,
         image=BACK_IMAGE,
         command = video_creator_to_main,
     )
@@ -478,7 +483,8 @@ def folder_processor():
         selected_folder_directory_frame,
         text = "Choose Directory",
         font = SUBTITLE_FONT,
-        bg = BLACK,
+        bg = BUTTON_BG,
+        fg= BUTTON_FG,
         # image=CHOOSE_DIRECTORY_IMAGE,
         command = lambda: selected_folder_directory.set(f"{fd.askdirectory()}")
     )
@@ -567,7 +573,8 @@ def folder_processor():
         selected_folder_output_directory_frame,
         text = "Choose Directory",
         font = SUBTITLE_FONT,
-        bg = BLACK,
+        bg = BUTTON_BG,
+        fg= BUTTON_FG,
         # image=CHOOSE_DIRECTORY_IMAGE,
         command = lambda: selected_folder_output_directory.set(f"{fd.askdirectory()}")
     )
@@ -595,8 +602,8 @@ def folder_processor():
         bottom_frame,
         text = "Process Folder",
         font = SUBTITLE_FONT,
-        bg = "#63666A",
-        fg = "black",
+        bg = BUTTON_BG,
+        fg = BUTTON_FG,
         image=PROCESS_FOLDER_IMAGE,
         command = lambda: Sequencer.video_folder_extraction(dir=selected_folder_directory.get(), vid_ext=selected_folder_extension.get(),recording_profile=selected_folder_recording_profile.get(), status_var=download_status, gui_root=root, output_dir=selected_folder_output_directory.get()),
     )
@@ -609,8 +616,8 @@ def folder_processor():
         bottom_frame,
         text = "Back",
         font = SUBTITLE_FONT,
-        bg = "#63666A",
-        fg = "black",
+        bg = BUTTON_BG,
+        fg = BUTTON_FG,
         image=BACK_IMAGE,
         command = folder_processor_to_main,
     )
