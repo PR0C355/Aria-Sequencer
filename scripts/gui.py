@@ -617,9 +617,11 @@ def folder_processor():
     back_button.pack(side=LEFT)
 
 def remove_main_page():
-    main_title.destroy()
-    video_creation_button.destroy()
-    folder_processor_button.destroy()
+    main_title.pack_forget()
+    main_page_separator.pack_forget()
+    main_page_spacer.pack_forget()
+    video_creation_button.pack_forget()
+    folder_processor_button.pack_forget()
 
 def remove_video_creator():
     video_creator_title.pack_forget()
