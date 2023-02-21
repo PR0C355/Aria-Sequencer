@@ -1,2 +1,8 @@
 *.venv
 build/
+Images/.DS_Store
+__pycache__/Sequencer.cpython-39.pyc
+__pycache__/gui.cpython-39.pyc
+.DS_Store
+scripts/__pycache__/Sequencer.cpython-39.pyc
+scripts/__pycache__/gui.cpython-39.pyc
