@@ -1,0 +1,9 @@
+ffmpeg-python==0.2.0
+ffprobe-python==1.0.3
+future==0.18.3
+glob2==0.7
+imageio==2.25.0
+imageio-ffmpeg==0.4.8
+numpy==1.24.1
+opencv-python==4.7.0.68
+Pillow==9.4.0
