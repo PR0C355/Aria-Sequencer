@@ -287,19 +287,29 @@ def video_creator():
 
     # Clockwise
     global selected_clockwise_button
-    global selected_clockwise_entry
+    global selected_clockwise_label
+
 
     selected_clockwise_button = tk.Checkbutton(
         video_extension_frame,
-        text="Turn 90\U000000B0 Clockwise",
         variable=selected_clockwise,
         onvalue=True,
         offvalue=False,
         font=SUBTITLE_FONT,
         bg=BLACK,
-        fg=WHITE,
+        fg=BLACK,
     )
-    selected_clockwise_button.pack()
+    selected_clockwise_button.pack(side=LEFT)
+
+    selected_clockwise_label = tk.Label(
+        video_extension_frame,
+        text="Turn 90\U000000B0 Clockwise",
+        # width=50,
+        font=SUBTITLE_FONT,
+        background=LABEL_BG,
+        fg=LABEL_FG
+    )
+    selected_clockwise_label.pack(side=LEFT)
 
     # Frame Rate
     global frame_rate_frame
