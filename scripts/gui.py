@@ -158,7 +158,7 @@ def video_creator():
         background=LABEL_BG,
         fg=LABEL_FG
     )
-    selected_image_directory_label.pack(side=LEFT)
+    selected_image_directory_label.pack(side=LEFT, fill="x", expand=True)
 
     selected_image_directory_entry = tk.Entry(
         image_directory_frame,
@@ -170,7 +170,7 @@ def video_creator():
         insertbackground=WHITE
     )
     selected_image_directory_entry.config(borderwidth=5, highlightthickness=0)
-    selected_image_directory_entry.pack(side=LEFT)
+    selected_image_directory_entry.pack(side=LEFT, fill="x", expand=True)
     selected_image_directory_entry.focus_set()
 
     download_directory_button = tk.Button(
@@ -182,7 +182,7 @@ def video_creator():
         # image=CHOOSE_DIRECTORY_IMAGE,
         command = lambda: selected_image_directory.set(f"{fd.askdirectory()}")
     )
-    download_directory_button.pack(side=LEFT) 
+    download_directory_button.pack(side=LEFT, fill="x", expand=True)
 
     # Video Filename
     global video_filename_frame
