@@ -5,7 +5,7 @@ from tkinter import *
 
 from PIL import Image, ImageTk
 
-import Sequencer as Sequencer
+import scripts.Sequencer as Sequencer
 
 BLACK: str = "black"
 WHITE: str = "white"
