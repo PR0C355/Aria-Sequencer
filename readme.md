@@ -89,14 +89,18 @@ That's it! You should now have FFmpeg installed on your Windows machine.
 
 ## Supported Formats
 
--   Input Image Formats: JPEG
+-   Input Image Formats: JPG
 -   Input Audio Formats: WAV
--   Output Video Formats: MP4, AVI, MOV, WMV
+-   Output Video Formats: MP4, AVI, MOV, M4V
 
 ## Credits
 
 -   OpenCV - [https://opencv.org/](https://opencv.org/)
 -   FFmpeg - [https://ffmpeg.org/](https://ffmpeg.org/)
+
+
+-   Button Images - [Art Done By Emmy Cuddy](https://ecuddy20.myportfolio.com/)
+    -   The button images used in this application have been created by Emmy Cuddy. I'd like to thank her for providing these images for use in this application.
 
 ## License
 
